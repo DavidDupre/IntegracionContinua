@@ -21,7 +21,7 @@ services:
   app:
     build: .
     networks:
-      - mi-red
+      - mi-red.
     depends_on:
       - db
 
