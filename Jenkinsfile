@@ -1,52 +1,52 @@
 pipeline {
-    agent any 
-
+    agent any
+    
+    environment {
+        DOCKER_HOST = "tcp://host.docker.internal:2375"
+    }
+    
     stages {
-        // Etapa 1: Obtener el código
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/DavidDupre/IntegracionContinua'
+                checkout scm
             }
         }
-
-        // Etapa 2: Construir imágenes Docker
+        
         stage('Build Docker') {
             steps {
-                sh 'docker-compose build'
+                script {
+                    bat 'docker-compose --version'
+                    bat 'docker-compose build'
+                }
             }
         }
-
-        // Etapa 3: Ejecutar pruebas (necesitarás añadir tests luego)
+        
         stage('Test') {
             steps {
-                sh 'docker-compose up -d'
-                sh 'docker exec tu-app-node npm test || true'
-                sh 'docker-compose down'
+                script {
+                    bat 'docker-compose up -d'
+                    // Espera que MySQL esté listo
+                    bat 'timeout /t 30 /nobreak > nul'
+                    // Ejecuta pruebas (necesitarás añadirlas a tu proyecto)
+                    bat 'docker exec integracioncontinua-app npm test || exit 0'
+                }
             }
-        }
-
-        // Etapa 4: Desplegar en desarrollo (opcional)
-        stage('Deploy to Dev') {
-            when {
-                branch 'main'
-            }
-            steps {
-                sh 'docker-compose up -d'
+            post {
+                always {
+                    bat 'docker-compose down'
+                }
             }
         }
     }
-
-    // Post-acciones (notificaciones, limpieza)
+    
     post {
         always {
             cleanWs()
         }
         failure {
-            emailext (
-                subject: '🚨 CI Falló: ${JOB_NAME}',
-                body: 'Error en el build ${BUILD_NUMBER}. Revisa: ${BUILD_URL}',
-                to: 'tu-email@example.com'
-            )
+            emailext body: 'Build ${BUILD_NUMBER} failed. Please check: ${BUILD_URL}',
+                    subject: 'FAILED: ${JOB_NAME}',
+                    to: 'tu-email@example.com'
         }
     }
 }
