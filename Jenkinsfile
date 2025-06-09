@@ -1,10 +1,13 @@
 pipeline {
     agent any
     
+    triggers {
+        githubPush()
+    }
+    
     environment {
         DOCKER_HOST = "tcp://host.docker.internal:2375"
     }
-    
     stages {
         stage('Checkout') {
             steps {
