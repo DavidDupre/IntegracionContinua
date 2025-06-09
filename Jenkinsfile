@@ -19,7 +19,7 @@ pipeline {
                     bat 'docker-compose build'
                 }
             }
-        }
+        };
         
         stage('Test') {
             steps {
