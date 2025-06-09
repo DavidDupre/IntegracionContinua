@@ -20,6 +20,7 @@ pipeline {
                 script {
                     bat 'docker-compose --version'
                     bat 'docker-compose build'
+                    bat 'docker-compose build --no-cache'  
                 }
             }
         };
@@ -29,7 +30,7 @@ pipeline {
                 script {
                     bat 'docker-compose up -d'
                     // Espera que MySQL esté listo
-                    bat 'timeout /t 30 /nobreak > nul'
+                    bat 'timeout /t 15 /nobreak > nul'
                     // Ejecuta pruebas (necesitarás añadirlas a tu proyecto)
                     bat 'docker exec integracioncontinua-app npm test || exit 0'
                 }
