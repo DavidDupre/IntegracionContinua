@@ -1,13 +1,10 @@
 pipeline {
     agent any
     
-    triggers {
-        githubPush()
+    environment {
+        DOCKER_HOST = "tcp://localhost:2375"
     }
     
-    environment {
-        DOCKER_HOST = "tcp://host.docker.internal:2375"
-    }
     stages {
         stage('Checkout') {
             steps {
@@ -18,26 +15,23 @@ pipeline {
         stage('Build Docker') {
             steps {
                 script {
-                    bat 'docker-compose --version'
-                    bat 'docker-compose build'
-                    bat 'docker-compose build --no-cache'  
+                    bat 'docker compose version'
+                    bat 'docker compose build'
                 }
             }
-        };
+        }
         
         stage('Test') {
             steps {
                 script {
-                    bat 'docker-compose up -d'
-                    // Espera que MySQL esté listo
+                    bat 'docker compose up -d'
                     bat 'timeout /t 15 /nobreak > nul'
-                    // Ejecuta pruebas (necesitarás añadirlas a tu proyecto)
                     bat 'docker exec integracioncontinua-app npm test || exit 0'
                 }
             }
             post {
                 always {
-                    bat 'docker-compose down'
+                    bat 'docker compose down'
                 }
             }
         }
