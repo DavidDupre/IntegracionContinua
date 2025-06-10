@@ -22,7 +22,7 @@ services:
     volumes:
       - ./frontend:/app
     ports:
-      - "8080:8080"
+      - "3001:3002"
     command: npm run serve
     depends_on:
       - backend
