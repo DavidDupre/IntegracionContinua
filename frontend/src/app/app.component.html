@@ -1,0 +1,9 @@
+<div class="container">
+  <h1>💡 Integración Continua</h1>
+  <p *ngIf="resultado !== null" class="result">
+    Resultado desde la base de datos: <strong>{{ resultado }}</strong>
+  </p>
+  <p *ngIf="resultado === null" class="loading">
+    Cargando resultado...
+  </p>
+</div>

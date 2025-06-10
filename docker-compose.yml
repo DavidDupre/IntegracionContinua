@@ -8,7 +8,7 @@ services:
       - mi-red
 
   backend:
-    build: .
+    build: ./Backend
     ports:
       - "3000:3000"
     depends_on:
@@ -17,13 +17,9 @@ services:
       - mi-red
 
   frontend:
-    image: node:14
-    working_dir: /app
-    volumes:
-      - ./frontend:/app
+    build: ./frontend
     ports:
-      - "3001:3002"
-    command: npm run serve
+      - "4200:80"
     depends_on:
       - backend
     networks:

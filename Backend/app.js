@@ -1,9 +1,12 @@
+const express = require('express');
 const mysql = require('mysql2/promise');
+const app = express();
+const PORT = 3001;
 
 async function testConnection() {
   try {
     const connection = await mysql.createConnection({
-      host: 'mi-db',
+      host: 'db',
       user: 'root',
       password: 'password'
     });
@@ -14,5 +17,5 @@ async function testConnection() {
     console.error('❌ Error de conexión:', error.message);
   }
 }
-
+app.listen(PORT, () => console.log(`Backend corriendo en puerto ${PORT}`));
 testConnection();

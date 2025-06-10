@@ -6,6 +6,12 @@ pipeline {
     }
 
     stages {
+        steps {
+            dir('frontend') {
+            bat 'npm install'
+            bat 'npm run test -- --watch=false --browsers=ChromeHeadless'
+            }
+        }
         stage('Checkout') {
             steps {
                 checkout scm
