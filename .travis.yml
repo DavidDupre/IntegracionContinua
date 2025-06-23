@@ -1,0 +1,20 @@
+language: node_js
+node_js:
+  - "14" # Usa la misma versión que en tu Docker
+
+services:
+  - docker
+
+before_install:
+  - docker --version
+  - docker-compose --version
+
+install:
+  - cd frontend && npm install && cd ..
+  - docker-compose build
+
+script:
+  - docker-compose up -d
+  - sleep 15 # Espera que los contenedores inicien
+  - docker-compose exec backend node app.js # Prueba de conexión a DB
+  - cd frontend && npm run test -- --watch=false --browsers=ChromeHeadless
