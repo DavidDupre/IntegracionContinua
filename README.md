@@ -27,3 +27,5 @@ services:
 
 networks:
   mi-red:
+
+[![Build Status](https://travis-ci.com/DavidDupre/IntegracionContinua.svg?branch=main)](https://travis-ci.com/DavidDupre/IntegracionContinua)
