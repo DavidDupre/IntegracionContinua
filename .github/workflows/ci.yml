@@ -19,6 +19,14 @@ jobs:
       with:
         node-version: '20'
 
+    - name: Install frontend dependencies
+      working-directory: ./frontend
+      run: npm ci
+
+    - name: Run frontend tests
+      working-directory: ./frontend
+      run: npm run test -- --watch=false --browsers=ChromeHeadless
+
     - name: Build containers
       run: docker compose build
 
@@ -33,9 +41,6 @@ jobs:
 
     - name: Run backend tests
       run: docker compose run backend npm test
-
-    - name: Run frontend tests
-      run: docker compose run frontend npm run test
 
     - name: Shutdown containers
       if: always()
