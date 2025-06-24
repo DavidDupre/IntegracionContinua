@@ -29,8 +29,7 @@ jobs:
       run: chmod +x wait-for-it.sh
 
     - name: Wait for DB
-      run: ./wait-for-it.sh localhost 3306 -t 30
-
+      run: ./wait-for-it.sh db 3306 -t 30
 
     - name: Run backend tests
       run: docker compose run backend npm test
