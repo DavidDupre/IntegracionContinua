@@ -25,8 +25,12 @@ jobs:
     - name: Start containers
       run: docker compose up -d
 
+    - name: Make wait-for-it.sh executable
+      run: chmod +x wait-for-it.sh
+
     - name: Wait for DB
-      run: ./wait-for-it.sh localhost:3306 --timeout=30
+      run: ./wait-for-it.sh localhost 3306 -t 30
+
 
     - name: Run backend tests
       run: docker compose run backend npm test
